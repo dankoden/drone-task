@@ -13,6 +13,21 @@ This project runs an ArduPilot SITL mission script that:
 - Point B: `50.443326, 30.448078`
 - Target altitude: `100 m`
 
+## Flight Accuracy
+
+Landing accuracy is reported by the mission script as:
+
+- `dist_to_B` in meters (distance from touchdown point to target point B)
+- printed at the end of mission:
+  - `Touchdown lat=... lon=... dist_to_B=...m`
+
+Current practical target for this setup:
+
+- desired: `<= 1.0 m`
+- strong result: `<= 0.5 m`
+
+Note: final error depends on wind model, SITL physics, and selected speed profile.
+
 ---
 
 ## Quick Start (macOS / Ubuntu)
