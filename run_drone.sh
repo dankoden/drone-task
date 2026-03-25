@@ -9,7 +9,13 @@ ARRIVAL_RADIUS="${ARRIVAL_RADIUS:-3}"
 LOG_INTERVAL="${LOG_INTERVAL:-1}"
 SPEED_SCALE="${SPEED_SCALE:-4.0}"
 
-python Tools/autotest/stabilize_rc_override_mission.py \
+if [[ -x "venv/bin/python" ]]; then
+  PYTHON_BIN="venv/bin/python"
+else
+  PYTHON_BIN="${PYTHON_BIN:-python3}"
+fi
+
+PYTHONUNBUFFERED=1 "$PYTHON_BIN" -u Tools/autotest/stabilize_rc_override_mission.py \
   --connect "$CONNECT" \
   --lat-b "$LAT_B" --lon-b "$LON_B" --alt "$ALT" \
   --arrival-radius "$ARRIVAL_RADIUS" --log-interval "$LOG_INTERVAL" \
