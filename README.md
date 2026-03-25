@@ -7,6 +7,13 @@ This repository contains a custom ArduPilot SITL mission script for a test task:
 - Hold target altitude during transit
 - Land as close as possible to point **B**
 
+## Integration With ArduPilot
+
+This task is implemented directly inside an ArduPilot workspace and uses ArduPilot SITL + MAVProxy for simulation and visualization.
+
+- ArduPilot official repository: [https://github.com/ArduPilot/ardupilot](https://github.com/ArduPilot/ardupilot)
+- ArduPilot project website: [https://ardupilot.org](https://ardupilot.org)
+
 ## Mission Points
 
 - Point A (start): `50.450739, 30.461242`
@@ -39,7 +46,7 @@ This repository contains a custom ArduPilot SITL mission script for a test task:
 ### macOS
 
 ```bash
-cd /Users/idanko/Desktop/ardupilot
+cd /path/to/ardupilot
 python3 -m venv venv
 source venv/bin/activate
 pip install --upgrade pip
@@ -64,7 +71,7 @@ pip install dronekit pymavlink MAVProxy matplotlib opencv-python
 Run in terminal #1:
 
 ```bash
-cd /Users/idanko/Desktop/ardupilot
+cd /path/to/ardupilot
 source venv/bin/activate
 Tools/autotest/sim_vehicle.py -v ArduCopter -f quad --map --console -l 50.450739,30.461242,584,0
 ```
@@ -80,7 +87,7 @@ map icon 50.443326 30.448078 redflag
 Run in terminal #2:
 
 ```bash
-cd /Users/idanko/Desktop/ardupilot
+cd /path/to/ardupilot
 source venv/bin/activate
 ./run_drone.sh
 ```
@@ -111,4 +118,3 @@ python Tools/autotest/stabilize_rc_override_mission.py \
 ## Stop / Safety
 
 - Press `Ctrl+C` to abort mission immediately.
-
