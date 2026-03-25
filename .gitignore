@@ -173,3 +173,14 @@ env.bak/
 venv.bak/
 autotest_result_*_junit.xml
 .python-version
+
+# Drone task local runtime artifacts
+run_drone.log
+run_vehicle.log
+*.tlog
+*.tlog.raw
+mav.parm
+logs/
+build/
+__pycache__/
+*.pyc

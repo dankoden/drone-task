@@ -160,3 +160,115 @@ for reviewing patches on their specific area.
   - ***Subsystem***: ESP32,AP_HAL_ESP32
 - [Charles Villard](https://github.com/Silvanosky):
   - ***Subsystem***: ESP32,AP_HAL_ESP32
+
+---
+
+## Drone Task (macOS + Linux)
+
+This repository contains a custom RC-override mission script for ArduPilot SITL:
+
+- Script: `Tools/autotest/stabilize_rc_override_mission.py`
+- Runner (with log via tee): `./run_drone.sh`
+- Target mission: Takeoff in `STABILIZE`, fly from A to B while holding altitude, and land near B using RC Override.
+
+### Mission Points
+
+- Point A (start): `50.450739, 30.461242`
+- Point B (target): `50.443326, 30.448078`
+- Target altitude: `100 m`
+
+### Prerequisites
+
+#### macOS
+
+1. Install Xcode Command Line Tools:
+
+```bash
+xcode-select --install
+```
+
+2. Install Python 3 and dependencies:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install --upgrade pip
+pip install dronekit pymavlink MAVProxy matplotlib opencv-python
+```
+
+#### Linux (Ubuntu)
+
+1. Install system packages:
+
+```bash
+sudo apt update
+sudo apt install -y git python3 python3-venv python3-pip
+```
+
+2. Create virtual environment and install Python deps:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install --upgrade pip
+pip install dronekit pymavlink MAVProxy matplotlib opencv-python
+```
+
+### Mission Planner
+
+- Mission Planner is officially Windows-first.
+- For Ubuntu/macOS workflows in this task, MAVProxy map+console is used.
+
+### Run SITL
+
+From repository root:
+
+```bash
+source venv/bin/activate
+Tools/autotest/sim_vehicle.py -v ArduCopter -f quad --map --console -l 50.450739,30.461242,584,0
+```
+
+Optional map marker for final point B (in MAVProxy console):
+
+```text
+map icon 50.443326 30.448078 redflag
+```
+
+### Run Mission Script (with tee log)
+
+In another terminal:
+
+```bash
+cd /Users/idanko/Desktop/ardupilot
+source venv/bin/activate
+./run_drone.sh
+```
+
+Mission output is written to:
+
+- `./run_drone.log`
+
+### Manual run (without wrapper)
+
+```bash
+python Tools/autotest/stabilize_rc_override_mission.py \
+  --connect udp:127.0.0.1:14550 \
+  --lat-a 50.450739 --lon-a 30.461242 \
+  --lat-b 50.443326 --lon-b 30.448078 \
+  --alt 100 --arrival-radius 3 --speed-scale 4.0 \
+  2>&1 | tee ./run_drone.log
+```
+
+### Wind Setup used by script
+
+The script configures and verifies these SITL parameters:
+
+- `SIM_WIND_SPD = 3`
+- `SIM_WIND_DIR = 30`
+- `SIM_WIND_TURB = 2`
+- `SIM_WIND_TURB_FREQ = 0.2` (or fallback via `SIM_WIND_TC` if needed)
+
+### Safety / stop
+
+- Press `Ctrl+C` during mission to trigger emergency abort (override clear + disarm attempt).
+
